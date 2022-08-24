@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volume da caixa d' água</title>
+  <style>
+    :root {
+      --font-color: #222;
+      --bg-color: #f2f3f7;
+      --button-bg-color: #f2f3f7;
+      --button-shadow:
+        -6px -6px 8px rgba(255, 255, 255, 0.9),
+        5px 5px 8px rgba(0, 0, 0, 0.07);
+    }
+
+    [data-theme="dark"] {
+      --font-color: #fff;
+      --bg-color: #181818;
+      --button-bg-color: #121212;
+      --button-shadow:
+        -2px -2px 4px rgba(255, 255, 255, 0.05),
+        0 0 10px 10px rgba(255, 255, 255, 0.005),
+        2px 2px 8px rgba(60, 60, 60, 0.1);
+    }
+
+    html {
+      box-sizing: border-box;
+      font-size: 18px;
+      font-family: 'Roboto', sans-serif;
+      color: var(--font-color);
+    }
+
+    *,
+    *:before,
+    *:after {
+      box-sizing: inherit;
+    }
+
+    body {
+      width: 100vw;
+      overflow-x: hidden;
+      overflow-y: auto;
+      height: auto;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      background-color: #f2f3f7;
+    }
+
+    body[data-theme="dark"] {
+      background-color: #181818;
+    }
+
+    .color-cool {
+      color: #077dfe;
+    }
+
+    .color-warm {
+      color: #ff7a00;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-evenly;
+      padding-top: 25px;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    @media screen and (min-width:800px) {
+      .container {
+        flex-direction: row;
+      }
+    }
+
+    .app-container {
+      background-color: var(--bg-color);
+      border-radius: 40px;
+      box-shadow: -2px -2px 4px 0px #464646, 50px 50px 50px 0px rgba(0, 0, 0, .25);
+      display: block;
+      flex: 1;
+      min-height: 500px;
+      max-width: 350px;
+      margin-bottom: 25px;
+      overflow: hidden;
+      padding: 30px;
+    }
+
+    .app-top-bar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .app-heading {
+      color: var(--font-color);
+      display: block;
+      flex: 1;
+      font-size: 28px;
+      font-weight: 800;
+      margin: 0;
+      text-align: center;
+    }
+
+    button {
+      border: 0;
+
+    }
+
+    button:focus {
+      border: none;
+      outline: 0 !important;
+      outline-style: none;
+    }
+
+    .button {
+      color: var(--font-color);
+      position: relative;
+      border-radius: 15px;
+      background: var(--button-bg-color);
+      font-weight: 700;
+      transition: all 100ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: var(--button-shadow);
+      cursor: pointer;
+    }
+
+    .button.button-link {
+      color: #067CF8;
+      display: block;
+      font-size: 17px;
+      margin: 30px 0 0;
+      padding: 20px 0;
+      width: 100%;
+    }
+
+    .button.button-small {
+      color: #6D6E74;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      line-height: 40px;
+      width: 40px;
+      height: 40px;
+    }
+
+    .button.button-small svg {
+      width: 16px;
+      height: auto;
+      fill: var(--font-color) !important;
+      color: var(--font-color) !important;
+    }
+
+    .button.button-small svg g#ic_fluent_dark_theme_24_regular {
+      fill: var(--font-color) !important;
+      color: var(--font-color) !important;
+    }
+
+    .button.button-large {
+      display: flex;
+      font-size: 20px;
+      flex-direction: column;
+      padding: 15px;
+      text-align: left;
+    }
+
+    .button.button-large>svg {
+      margin-bottom: 40px;
+      width: 30px;
+    }
+
+    .button-dial {
+      border-radius: 50%;
+      display: flex;
+      height: 270px;
+      margin: 35px auto;
+      align-items: center;
+      justify-content: center;
+      width: 270px;
+    }
+
+    .button-dial-top {
+      background: var(--button-bg-color);
+      box-shadow: var(--button-shadow);
+      border-radius: 50%;
+      width: 70%;
+      height: 70%;
+      margin: 0 auto;
+      position: absolute;
+      top: 15%;
+      left: 15%;
+      text-align: center;
+      z-index: 5;
+    }
+
+    .button-dial-label {
+      color: #067CF8;
+      font-size: 28px;
+      fill: #067CF8;
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .button-dial-spoke {
+      background-color: rgba(96, 171, 254, 0.6);
+      display: block;
+      height: 2px;
+      width: 83%;
+      position: absolute;
+      margin: 0 auto;
+      z-index: 5;
+      top: 50%;
+    }
+
+    .button-dial-spoke:nth-child(2) {
+      transform: rotate(30deg);
+    }
+
+    .button-dial-spoke:nth-child(3) {
+      transform: rotate(60deg);
+    }
+
+    .button-dial-spoke:nth-child(4) {
+      transform: rotate(90deg);
+    }
+
+    .button-dial-spoke:nth-child(5) {
+      transform: rotate(120deg);
+    }
+
+    .button-dial-spoke:nth-child(6) {
+      transform: rotate(150deg);
+    }
+
+    .button-block {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 24px;
+      width: 100%;
+    }
+
+    .button-block span {
+      font-size: 16px;
+    }
+
+    .button-block span.subtle {
+      color: #6D6E74;
+    }
+
+    .flex-button-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .water-tank{
+      width: auto;
+      height: 96px;
+    }
+  </style>
+  <script>
+    function toggleTheme() {
+
+      const bodyElement = document.getElementById("body-style");
+      const containerElement = document.getElementById("container-style");
+
+      if (bodyElement.hasAttribute("data-theme")) {
+        bodyElement.removeAttribute("data-theme")
+        containerElement.removeAttribute("data-theme")
+      } else {
+        bodyElement.setAttribute("data-theme", "dark")
+        containerElement.setAttribute("data-theme", "dark")
+      }
+    }
+  </script>
+</head>
+
+<body id="body-style" data-theme="dark">
+  <div id="container-style" class="app-container" data-theme="dark">
+    <div class="app-top-bar">
+      <button onclick="toggleTheme();" class="button button-small">
+        <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g id="🔍-Product-Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="ic_fluent_dark_theme_24_regular" fill="#FFFFFF" fill-rule="nonzero">
+              <path
+                d="M12,22 C17.5228475,22 22,17.5228475 22,12 C22,6.4771525 17.5228475,2 12,2 C6.4771525,2 2,6.4771525 2,12 C2,17.5228475 6.4771525,22 12,22 Z M12,20.5 L12,3.5 C16.6944204,3.5 20.5,7.30557963 20.5,12 C20.5,16.6944204 16.6944204,20.5 12,20.5 Z"
+                id="🎨-Color"></path>
+            </g>
+          </g>
+        </svg>
+      </button>
+      <h1 class="app-heading">Volume</h1>
+    </div>
+    <div class="app-content">
+      <div class="button button-block">
+        <span class="subtle">Período</span> <span>Agora</span>
+        <div class="button button-small"><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="345.57px" height="345.57px"
+            viewBox="0 0 345.57 345.57" style="enable-background:new 0 0 345.57 345.57;" xml:space="preserve">
+            <g>
+              <g>
+                <g>
+                  <path d="M172.785,0h-15.583v82.164h31.156V32.018c71.392,7.773,126.035,67.902,126.035,140.768
+                 c0,78.096-63.531,141.626-141.608,141.626c-78.08,0-141.608-63.53-141.608-141.626c0-31.963,10.386-62.123,30.024-87.211
+                 l5.491-6.995L42.145,59.37l-5.479,6.996C12.679,96.993,0,133.796,0,172.785C0,268.054,77.507,345.57,172.785,345.57
+                 c95.269,0,172.785-77.504,172.785-172.785C345.57,77.507,268.054,0,172.785,0z" />
+                </g>
+                <g>
+                  <path d="M147.949,199.257c5.645,6.768,13.577,10.924,22.314,11.704c1.009,0.096,2.017,0.144,3.008,0.144
+                 c16.858,0,31.264-13.174,32.777-29.97c0.792-8.749-1.874-17.297-7.512-24.073c-5.645-6.776-13.571-10.938-22.332-11.736
+                 c-2.88-0.252-5.801-0.099-8.905,0.511l-95.167-80.65l69.908,102.736c-0.879,2.558-1.414,4.945-1.625,7.269
+                 C139.624,183.939,142.299,192.49,147.949,199.257z" />
+                </g>
+              </g>
+            </g>
+            <g>
+            </g>
+            <g>
+            </g>
+            <g>
+            </g>
+            <g>
+            </g>
+            <g>
+            </g>
+            <g>
+            </g>
+            <g>
+            </g>
+            <g>
+            </g>
+            <g>
+            </g>
+            <g>
+            </g>
+            <g>
+            </g>
+            <g>
+            </g>
+            <g>
+            </g>
+            <g>
+            </g>
+            <g>
+            </g>
+          </svg></div>
+      </div>
+      <div class="button button-dial">
+
+        <span class="button-dial-spoke"></span>
+        <span class="button-dial-spoke"></span>
+        <span class="button-dial-spoke"></span>
+        <span class="button-dial-spoke"></span>
+        <span class="button-dial-spoke"></span>
+        <span class="button-dial-spoke"></span>
+
+        <div class="button-dial-top"></div>
+        <div class="button-dial-label">
+          <svg class="water-tank" width="180" height="277" viewBox="0 0 180 277" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_1_2)">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M90.2757 76.1326C93.6662 80.0023 110.248 89.4269 114.502 106.618C118.522 122.861 106.32 136.591 92.5672 137.849L89.7373 138.932L89.7392 158.864L164.339 158.857L164.342 57.2999C164.386 51.508 165.018 51.7973 163.258 51.3885L89.8093 51.4331C89.5923 56.0537 88.9769 72.7089 90.2753 76.1323L90.2757 76.1326Z"
+                fill="#3CA8FD" />
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M15.1362 158.871L89.7392 158.864L89.7373 138.932L92.5672 137.849C87.0627 137.961 84.59 138.192 79.6798 136.033C76.6315 134.693 72.4463 131.819 70.9882 130.122C59.1578 116.349 64.2511 102.285 74.4755 89.6194C77.56 85.799 85.8143 77.5698 90.2753 76.1323C88.9769 72.7089 89.5923 56.0534 89.8093 51.4331L16.2173 51.4094C14.5744 51.3206 15.0624 51.2165 15.13 56.7553C15.5361 89.9481 15.1362 125.6 15.1362 158.871V158.871Z"
+                fill="#72BAFC" />
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M92.5672 137.849C106.32 136.591 118.522 122.861 114.502 106.618C110.248 89.4265 93.6666 80.0023 90.2757 76.1326C85.8147 77.5702 77.5603 85.7994 74.4759 89.6198C64.2514 102.285 59.1582 116.35 70.9886 130.122C72.4463 131.819 76.6319 134.693 79.6802 136.034C84.5904 138.192 87.0631 137.962 92.5676 137.849H92.5672Z"
+                fill="#F9F8F5" />
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M16.2176 51.4097L89.8096 51.4335L89.722 3.05176e-05C87.8662 0.999685 87.0499 1.80028 85.2 3.0304C83.4772 4.17542 82.311 4.88837 80.6995 6.0984L39.2422 34.9178C37.4255 36.175 36.3291 37.0577 34.4897 38.2747C31.2585 40.4132 17.218 49.9524 16.2173 51.4097H16.2176Z"
+                fill="#9BCDFD" />
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M89.8097 51.4335L163.258 51.3889C162.337 50.0799 143.64 37.1834 140.881 35.3517C128.744 27.2931 115.84 17.6045 103.907 9.61709C102.149 8.44103 100.779 7.61121 99.0797 6.33507L89.722 3.05176e-05L89.8097 51.4335Z"
+                fill="#72B9FD" />
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M42.5469 250.833L42.6338 231.372L42.7423 192.45L42.5249 175.148L25.9483 175.138V276.782H42.7065L42.5469 250.833Z"
+                fill="#D2D2D8" />
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M136.732 192.45L136.835 231.372L136.946 250.833L136.762 276.782H153.527V175.126L136.96 175.141L136.732 192.45Z"
+                fill="#B9B9BF" />
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M89.7596 201.64V221.641C93.7655 223.813 97.6319 226.274 101.527 228.773L136.946 250.833L136.835 231.372L113.156 216.604C111.422 215.579 106.301 212.579 105.415 211.371C107.148 210.907 111.341 207.879 113.212 206.734C116.113 204.956 134.534 192.979 136.733 192.45L136.961 175.141L131.904 175.138C130.852 176.598 123.926 180.495 121.852 181.858L89.76 201.64H89.7596Z"
+                fill="#A1A1A6" />
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M42.7423 192.45C44.3997 192.849 48.9067 195.884 50.5956 196.994L74.0603 211.371C73.1811 212.571 68.2486 215.471 66.6646 216.408L42.6334 231.372L42.5465 250.833L54.3798 243.586C58.3781 240.959 62.0509 238.863 66.0565 236.342L89.7593 221.641V201.64C88.3202 201.263 86.0915 199.647 84.5597 198.708C80.4296 196.176 48.7519 176.778 47.5714 175.135L42.5246 175.148L42.7419 192.45L42.7423 192.45Z"
+                fill="#B9B9C0" />
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M89.7326 175.151L131.904 175.138L136.96 175.141L153.527 175.126L179.475 175.152V158.933L164.339 158.857L89.7392 158.864L89.7326 175.151Z"
+                fill="#575F64" />
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M25.9483 175.138L42.5249 175.148L47.5718 175.135L89.7326 175.151L89.7392 158.864L15.1362 158.871L3.8147e-06 158.937V175.151L25.9483 175.138Z"
+                fill="#7C8388" />
+            </g>
+            <defs>
+              <clipPath id="clip0_1_2">
+                <rect width="179.475" height="276.782" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
+          <br />
+
+          #TEMP# %
+        </div>
+      </div>
+
+      <button class="button button-link" onclick="window.location.reload()">
+        Atualizar
+      </button>
+    </div>
+  </div>
+  </div>
+</body>
+
+</html>
